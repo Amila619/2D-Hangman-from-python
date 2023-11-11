@@ -10,8 +10,8 @@ class Hangman:
     def __init__(self):
 
         # Defining the Main Window
-        self.loser_label = None
-        self.winner_label = None
+        self.running = False
+        self.img_label = None
         self.window = customtkinter.CTk()
         self.window.geometry("1000x600")
         self.window.configure(fg_color="#F0F0F1")
@@ -94,6 +94,7 @@ class Hangman:
         self.secret_word = random.choices((open("src/filtered_words.txt", "r")).readlines())[
             0].strip("\n").upper()
         self.secret_word_list = list(self.secret_word[:])
+        print(self.secret_word)
         self.text = ["_" for letter in self.secret_word_list]
 
     def generate_buttons(self):
@@ -139,7 +140,7 @@ class Hangman:
         # sw_label = customtkinter.CTkLabel(self.secret_word_frame, text=empty_string, font=('Product Sans Bold', 40))
         self.sw_label.configure(text=empty_string)
         self.sw_label.pack()
-        self.chances_label.place(relx=0.7, rely=0.1)
+        self.chances_label.place(relx=0.75, rely=0.1)
 
     def output(self, y):
         if y not in self.used_letters:
@@ -165,14 +166,18 @@ class Hangman:
             self.sw_label.configure(text="YOU WON !", font=("RoadRage", 40))
             self.winner_label = tkinter.Label()
             self.winner_label.place(anchor=tkinter.CENTER, x=500, y=250)
+            self.running = True
             self.win_window()
 
     def chances_over(self):
         self.loser_label = tkinter.Label()
         self.loser_label.place(anchor=tkinter.CENTER, x=500, y=250)
+        self.running = True
         self.lose_window()
 
     def new_game(self):
+        self.running = False
+        self.img_label.place_forget()
         self.clear_buttons()
         self.chances = 0
         self.chances_label.configure(text=f"Chances : {self.chances}")
@@ -190,22 +195,22 @@ class Hangman:
         self.img_label.place(anchor=tkinter.CENTER, x=550, y=250)
 
     def win_window(self):
-        self.img_label.destroy()
-        wframe = self.wframes[self.ind]
-        self.ind += 1
-        if self.ind == self.wframeCnt:
-            self.ind = 0
-        self.winner_label.configure(image=wframe)
-        self.window.after(100, self.win_window)
+        if self.running:
+            wframe = self.wframes[self.ind]
+            self.ind += 1
+            if self.ind == self.wframeCnt:
+                self.ind = 0
+            self.img_label.configure(image=wframe)
+            self.window.after(100, self.win_window)
 
     def lose_window(self):
-        self.img_label.destroy()
-        lframe = self.lframes[self.ind]
-        self.ind += 1
-        if self.ind == self.lframeCnt:
-            self.ind = 0
-        self.loser_label.configure(image=lframe)
-        self.window.after(100, self.lose_window)
+        if self.running:
+            lframe = self.lframes[self.ind]
+            self.ind += 1
+            if self.ind == self.lframeCnt:
+                self.ind = 0
+            self.img_label.configure(image=lframe)
+            self.window.after(100, self.lose_window)
 
 
 if __name__ == "__main__":
