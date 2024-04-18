@@ -1,2 +1,2 @@
-<h1>Hangman</h1>
-<p>Try demo version on .</p>
+# Hangman
+Try demo version on .
