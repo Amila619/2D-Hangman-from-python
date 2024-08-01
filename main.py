@@ -32,15 +32,9 @@ class Hangman:
 
         # Frame for keys
         self.Nframe = customtkinter.CTkFrame(master=self.window)
-        self.Nframe.configure(fg_color="transparent")
+        # self.Nframe.configure(fg_color="transparent")
         self.Nframe.pack(padx=20, pady=20, side=customtkinter.BOTTOM)
-
-        # Frame for secret_word
-        self.secret_word_frame = customtkinter.CTkFrame(master=self.window)
-        self.secret_word_frame.lower()
-        self.secret_word_frame.configure(fg_color="transparent")
-        self.secret_word_frame.place(relx=0.4, rely=0.65)
-
+        
         # btn for exit
         self.exit_btn = customtkinter.CTkButton(master=self.window,
                                                 fg_color="black",
@@ -62,6 +56,7 @@ class Hangman:
 
         # label for chances
         self.chances_label = customtkinter.CTkLabel(master=self.window,
+                                                    text_color="black",
                                                     text=f"Chances : {self.chances}",
                                                     font=("RoadRage", 40))
         # winner image
@@ -76,7 +71,8 @@ class Hangman:
                         range(self.lframeCnt)]
 
         # secret label
-        self.sw_label = customtkinter.CTkLabel(self.secret_word_frame,
+        self.sw_label = customtkinter.CTkLabel(self.window,
+                                               text_color="black",
                                                text="",
                                                anchor=tkinter.CENTER,
                                                font=('Product Sans Bold', 50))
@@ -140,7 +136,7 @@ class Hangman:
             empty_string += f" {element}"
       
         self.sw_label.configure(text=empty_string)
-        self.sw_label.place(anchor=tkinter.CENTER, relx=0.5, rely=0.1)
+        self.sw_label.place(anchor=tkinter.CENTER, relx=0.5, rely=0.7)
         self.chances_label.place(anchor=tkinter.CENTER, relx=0.8, rely=0.1)
 
     def output(self, y):
@@ -164,7 +160,7 @@ class Hangman:
 
     def check_winner(self):
         if self.text == self.secret_word_list:
-            self.sw_label.configure(text="YOU WON !", font=("RoadRage", 40))
+            self.sw_label.configure(text=" YOU WON !", font=("RoadRage", 40))
             self.winner_label = tkinter.Label()
             self.winner_label.place(anchor=tkinter.CENTER, relx=0.5, rely=0.5)
             self.running = True
