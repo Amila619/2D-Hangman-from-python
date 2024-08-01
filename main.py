@@ -37,6 +37,7 @@ class Hangman:
 
         # Frame for secret_word
         self.secret_word_frame = customtkinter.CTkFrame(master=self.window)
+        self.secret_word_frame.lower()
         self.secret_word_frame.configure(fg_color="transparent")
         self.secret_word_frame.place(relx=0.4, rely=0.65)
 
@@ -137,10 +138,10 @@ class Hangman:
         empty_string = ""
         for element in self.text:
             empty_string += f" {element}"
-        # sw_label = customtkinter.CTkLabel(self.secret_word_frame, text=empty_string, font=('Product Sans Bold', 40))
+      
         self.sw_label.configure(text=empty_string)
-        self.sw_label.pack()
-        self.chances_label.place(relx=0.75, rely=0.1)
+        self.sw_label.place(anchor=tkinter.CENTER, relx=0.5, rely=0.1)
+        self.chances_label.place(anchor=tkinter.CENTER, relx=0.8, rely=0.1)
 
     def output(self, y):
         if y not in self.used_letters:
@@ -165,13 +166,13 @@ class Hangman:
         if self.text == self.secret_word_list:
             self.sw_label.configure(text="YOU WON !", font=("RoadRage", 40))
             self.winner_label = tkinter.Label()
-            self.winner_label.place(anchor=tkinter.CENTER, x=500, y=250)
+            self.winner_label.place(anchor=tkinter.CENTER, relx=0.5, rely=0.5)
             self.running = True
             self.win_window()
 
     def chances_over(self):
         self.loser_label = tkinter.Label()
-        self.loser_label.place(anchor=tkinter.CENTER, x=500, y=250)
+        self.loser_label.place(anchor=tkinter.CENTER, relx=0.5, rely=0.5)
         self.running = True
         self.lose_window()
 
@@ -192,7 +193,7 @@ class Hangman:
         self.img = ImageTk.PhotoImage(img_)
 
         self.img_label = tkinter.Label(self.window, image=self.img)
-        self.img_label.place(anchor=tkinter.CENTER, x=550, y=250)
+        self.img_label.place(anchor=tkinter.CENTER, relx=0.5, rely=0.4)
 
     def win_window(self):
         if self.running:
