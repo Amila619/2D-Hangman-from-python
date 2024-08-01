@@ -10,7 +10,8 @@ class Hangman:
     def __init__(self):
 
         # Defining the Main Window
-        self.running = False
+        self.running = True
+        self.game_state = True
         self.img_label = None
         self.window = customtkinter.CTk()
         self.window.geometry("1000x600")
@@ -111,12 +112,11 @@ class Hangman:
         r = 0
         c = 10
         count = 0
-        # for letter_index in range(0, len(self.Button_List_dic)):
         for key in self.Button_List_dic.keys():
             if count % 13 == 0:
                 r += 1
                 c = 10
-            self.Button_List_dic[key].grid(row=r, column=c, padx=5, pady=5)
+            self.Button_List_dic[key].grid(row=r, column=c, padx=8, pady=5)
             c += 1
             count += 1
 
@@ -140,40 +140,41 @@ class Hangman:
         self.chances_label.place(anchor=tkinter.CENTER, relx=0.8, rely=0.1)
 
     def output(self, y):
-        if y not in self.used_letters:
-            if y in self.secret_word_list:
-                self.Button_List_dic[y].configure(fg_color="#2ECC71", hover=False)
-                playsound("src/music/mixkit-correct-answer-tone-2870-[AudioTrimmer.com].wav")
+        if self.running:
+            if y not in self.used_letters:
+                if y in self.secret_word_list:
+                    self.Button_List_dic[y].configure(fg_color="#2ECC71", hover=False)
+                    playsound("src/music/mixkit-correct-answer-tone-2870-[AudioTrimmer.com].wav")
+                else:
+                    self.Button_List_dic[y].configure(fg_color="#F50C0C", hover=False)
+                    playsound("src/music/mixkit-game-show-wrong-answer-buzz-950-[AudioTrimmer.com].wav")
+                self.used_letters.append(y)
+                self.chances += 1
+                self.chances_label.configure(text=f"Chances : {self.chances}")
+            if self.chances < 6:
+                self.update_image()
+                self.update_lable()
+                self.display_secret_word()
             else:
-                self.Button_List_dic[y].configure(fg_color="#F50C0C", hover=False)
-                playsound("src/music/mixkit-game-show-wrong-answer-buzz-950-[AudioTrimmer.com].wav")
-            self.used_letters.append(y)
-            self.chances += 1
-            self.chances_label.configure(text=f"Chances : {self.chances}")
-        if self.chances < 6:
-            self.update_image()
-            self.update_lable()
-            self.display_secret_word()
-        else:
-            self.chances_over()
-        self.check_winner()
+                self.chances_over()
+            self.check_winner()
 
     def check_winner(self):
         if self.text == self.secret_word_list:
             self.sw_label.configure(text=" YOU WON !", font=("RoadRage", 40))
             self.winner_label = tkinter.Label()
             self.winner_label.place(anchor=tkinter.CENTER, relx=0.5, rely=0.5)
-            self.running = True
+            self.running = False
             self.win_window()
 
     def chances_over(self):
         self.loser_label = tkinter.Label()
         self.loser_label.place(anchor=tkinter.CENTER, relx=0.5, rely=0.5)
-        self.running = True
+        self.running = False
         self.lose_window()
 
     def new_game(self):
-        self.running = False
+        self.running = True
         self.img_label.place_forget()
         self.clear_buttons()
         self.chances = 0
@@ -192,7 +193,7 @@ class Hangman:
         self.img_label.place(anchor=tkinter.CENTER, relx=0.5, rely=0.4)
 
     def win_window(self):
-        if self.running:
+        if not self.running:
             wframe = self.wframes[self.ind]
             self.ind += 1
             if self.ind == self.wframeCnt:
@@ -201,7 +202,7 @@ class Hangman:
             self.window.after(100, self.win_window)
 
     def lose_window(self):
-        if self.running:
+        if not self.running:
             lframe = self.lframes[self.ind]
             self.ind += 1
             if self.ind == self.lframeCnt:
