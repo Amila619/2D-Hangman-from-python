@@ -1,9 +1,9 @@
 import tkinter
-import customtkinter 
+import customtkinter  # type: ignore
 import random
-from PIL import ImageTk, Image 
+from PIL import ImageTk, Image  # type: ignore
 import string
-from playsound import playsound 
+from playsound import playsound  # type: ignore
 
 
 class Hangman:
