@@ -1,9 +1,9 @@
 import tkinter
-import customtkinter # type: ignore
+import customtkinter 
 import random
-from PIL import ImageTk, Image # type: ignore
+from PIL import ImageTk, Image 
 import string
-from playsound import playsound # type: ignore
+from playsound import playsound 
 
 
 class Hangman:
@@ -177,7 +177,7 @@ class Hangman:
         self.running = True
         self.img_label.place_forget()
         self.clear_buttons()
-        self.chances = 0
+        self.chances = 6
         self.chances_label.configure(text=f"Chances : {self.chances}")
         self.used_letters = []
         self.update_image()
