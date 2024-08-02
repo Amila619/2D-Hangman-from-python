@@ -1,9 +1,9 @@
 import tkinter
-import customtkinter # type: ignore
+import customtkinter
 import random
-from PIL import ImageTk, Image # type: ignore
+from PIL import ImageTk, Image
 import string
-from playsound import playsound # type: ignore
+from playsound import playsound
 
 
 class Hangman:
@@ -29,7 +29,7 @@ class Hangman:
                            "7.jpg", "8.jpg", "9.jpg", "10.jpg"]
         self.text = None
         self.used_letters = []
-        self.chances = 0
+        self.chances = 6
 
         # Frame for keys
         self.Nframe = customtkinter.CTkFrame(master=self.window)
@@ -149,9 +149,9 @@ class Hangman:
                     self.Button_List_dic[y].configure(fg_color="#F50C0C", hover=False)
                     playsound("src/music/mixkit-game-show-wrong-answer-buzz-950-[AudioTrimmer.com].wav")
                 self.used_letters.append(y)
-                self.chances += 1
+                self.chances -= 1
                 self.chances_label.configure(text=f"Chances : {self.chances}")
-            if self.chances < 6:
+            if self.chances > 0:
                 self.update_image()
                 self.update_lable()
                 self.display_secret_word()
