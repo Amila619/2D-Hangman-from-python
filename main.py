@@ -1,10 +1,9 @@
 import tkinter
 import customtkinter  # type: ignore
-import random
 from PIL import ImageTk, Image  # type: ignore
 import string
 from playsound import playsound  # type: ignore
-
+from utils import return_secret_word
 
 class Hangman:
     def __init__(self):
@@ -89,8 +88,7 @@ class Hangman:
         self.window.mainloop()
 
     def genarate_secret_word(self):
-        self.secret_word = random.choices((open("src/filtered_words.txt", "r")).readlines())[
-            0].strip("\n").upper()
+        self.secret_word = return_secret_word()
         self.secret_word_list = list(self.secret_word[:])
         print(self.secret_word)
         self.text = ["_" for letter in self.secret_word_list]
@@ -151,12 +149,11 @@ class Hangman:
                 self.used_letters.append(y)
                 self.chances -= 1
                 self.chances_label.configure(text=f"Chances : {self.chances}")
-            if self.chances > 0:
+            if self.chances > -1:
                 self.update_image()
                 self.update_lable()
                 self.display_secret_word()
-            else:
-                self.chances_over()
+            self.chances_over()
             self.check_winner()
 
     def check_winner(self):
@@ -168,10 +165,11 @@ class Hangman:
             self.win_window()
 
     def chances_over(self):
-        self.loser_label = tkinter.Label()
-        self.loser_label.place(anchor=tkinter.CENTER, relx=0.5, rely=0.5)
-        self.running = False
-        self.lose_window()
+        if self.text != self.secret_word_list and self.chances == 0:
+            self.loser_label = tkinter.Label()
+            self.loser_label.place(anchor=tkinter.CENTER, relx=0.5, rely=0.5)
+            self.running = False
+            self.lose_window()
 
     def new_game(self):
         self.running = True
@@ -185,7 +183,7 @@ class Hangman:
         self.display_secret_word()
 
     def update_image(self):
-        path = f"src/images/hangman{self.chances}.png"
+        path = f"src/images/hangman{6 - self.chances}.png"
         img_ = Image.open(path).resize((251, 260))
         self.img = ImageTk.PhotoImage(img_)
 
